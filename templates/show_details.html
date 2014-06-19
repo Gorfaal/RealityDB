@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block body %}
+    <div style="margin-top: 20%;">
+         <table class="table table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Started
+                </th>
+                <th>
+                    Ended
+                </th>
+                <th>
+                    Networks
+                </th>
+                <th>
+                    Categories
+                </th>
+                <th>
+                    Thumbnail
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr>
+                <td>
+                    {{ show.name }}
+                </td>
+                <td>
+                    {{ show.started }}
+                </td>
+                <td>
+                    {{ show.ended }}
+                </td>
+                <td>
+                    {% for network in show.networks.all %}
+                        {{ network }}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for category in show.categories.all %}
+                        {{ category }}
+                    {% endfor %}
+                </td>
+                <td>
+                    {{ show.thumbnail}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+{% endblock %}

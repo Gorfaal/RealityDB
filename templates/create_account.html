@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="row-fluid" style="margin-top: 70px; text-align: left;">
+    <div class="span6">
+        <h2>Create an Account</h2>
+        <form action="create_account.html" method="post"> {% csrf_token %}
+            Username <br />
+                {{ form.username }} <br />
+            Password <br />
+                {{ form.password1 }} <br />
+            Repeat Password <br />
+                {{ form.password2 }} <br />
+            First Name <br />
+                {{ form.first_name }} <br />
+            Last Name <br />
+                {{ form.last_name }} <br />
+            Email Address <br />
+                {{ form.email }} <br />
+
+            <input type ="submit" value="Create"/>
+        </form>
+    </div>
+</div>
+{% endblock %}

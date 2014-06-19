@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="../static/third_party/jquery/jquery.js"></script>
+        <script src="../static/third_party/bootstrap/js/bootstrap.js"></script>
+        <link  href="../static/third_party/bootstrap/css/bootstrap-custom.css" rel="stylesheet" />
+        <link  href="../static/third_party/bootstrap/css/bootstrap-responsive.css" rel="stylesheet" />
+        <script src="../static/third_party/datepicker/js/bootstrap-datepicker.js"></script>
+        <link  href="../static/third_party/datepicker/css/datepicker.css" rel="stylesheet" />
+
+        <style type="text/css">
+            .datepicker{z-index:1151;}
+        </style>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $('#startDate').datepicker();
+                $('#endDate').datepicker();
+                $('#addShowStart').datepicker();
+                $('#addShowEnd').datepicker();
+             });
+        </script>
+
+        <title>
+            {% block title %}
+            {% endblock %}
+        </title>
+        {% block head %}
+        {% endblock %}
+    </head>
+
+    <body>
+
+    <div class="container" style="">
+        <div class="navbar navbar-inverse navbar-fixed-top" style="margin-bottom: 70px">
+            <div class="navbar-inner">
+                <div class="container">
+                <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                </button>
+                <a class="brand" href="/">RealityDB</a>
+                    <div class="nav-collapse collapse">
+                        <ul class="nav">
+                            <li class="active">
+                                <a href="/">Home</a>
+                            </li>
+                            <li>
+                                <a id="addShow" href="#myModal" role="button" data-toggle="modal">Add Show</a>
+                            </li>
+                            <li>
+                                <a href="/about/">About</a>
+                            </li>
+                        </ul>
+                        {% if not user.is_authenticated %}
+
+                            <form class="navbar-form pull-right" action="/login/" method="post" style="">{% csrf_token %}
+                                <input name="email" class="span2" type="text" placeholder="Username">
+                                <input name="password" class="span2" type="password" placeholder="Password">
+                                <button type="submit" class="btn">Sign in</button>
+                                <a href="/account/create" class="btn" style="margin-left:10px;">Create Account</a>
+                            </form>
+                        {% else %}
+                               <ul class="nav pull-right">
+                                    {% if user.is_superuser %}
+                                    <li>
+                                        <div class="btn-group">
+                                            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                                            Admin
+                                            <span class="caret"></span>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a href="/admin/">Control Panel</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/change_log/">Change Log</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    {% endif %}
+                                    <li>
+                                        <a href="/logout/">Logout</a>
+                                    </li>
+                                </ul>
+                            <div class="pull-right" style="color: white; padding: 10px">
+                            Welcome {{ user.username }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if messages %}
+            <ul class="messages" style="list-style: none; position: relative; margin-top: 70px; left:30%;">
+            {% for message in messages %}
+                <li{% if message.tags %} class="label label-{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+        {% block body %}
+        {% endblock body %}
+    </div>
+    </body>
+</html>

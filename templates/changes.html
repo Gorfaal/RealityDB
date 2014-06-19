@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+{% block body %}
+<style type="text/css">
+    .glyphicon{
+        font-size: 60px;
+    }
+</style>
+<div class="hero-unit" style="margin-top: 70px; max-height: 700px; overflow-y: auto;">
+    <h3 style="text-align: center">Existing Show Change Suggestions</h3>
+    <ul style="list-style: none;">
+    {% for show in shows %}
+        <strong>{{ show.name }} (ID: {{ show.id }})</strong>
+        <li>
+            <table class="table table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th>
+                            {{ show.name }}
+                        </th>
+                        <th>
+                            {{ show.started }}
+                        </th>
+                        <th>
+                            {{ show.ended }}
+                        </th>
+                        <th>
+                            {% for network in show.networks.all %}
+                                {{ network }}
+                            {% endfor %}
+                        </th>
+                        <th>
+                            {% for category in show.categories.all %}
+                                {{ category }}
+                            {% endfor %}
+                        </th>
+                        <th>
+                            {{ show.thumbnail }}
+                        </th>
+                        <th>
+                            User
+                        </th>
+                        <th>
+                            Modified
+                        </th>
+                        <th>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for change in show.changes_set.all %}
+                    <tr {% if change.accepted == False%} style='background-color: #F57A76'>{% else %} style='background-color: #87ED96'>{% endif %}
+                    <td>
+                        {{ change.name }}
+                    </td>
+                    <td>
+                        {{ change.started }}
+                    </td>
+                    <td>
+                        {{ change.ended }}
+                    </td>
+                    <td>
+                        {% for network in change.networks.all %}
+                            {{ network }}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for category in change.categories.all %}
+                            {{ category }}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {{ change.thumbnail}}
+                    </td>
+                    <td>
+                        {{ change.user.username}}
+                    </td>
+                    <td>
+                        {{ change.modified }}
+                    </td>
+                    <td>
+                        {% if change.accepted == False%}
+                            <a href="/accept_change/{{ change.id }}">
+                                <i class="icon- icon-ok-sign"></i>
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+                </table>
+            </li>
+    {% endfor %}
+    </ul>
+</div>
+<div class="hero-unit" style="margin-top: 80px; max-height: 700px; overflow-y: auto;">
+    <h3 style="text-align: center">New Suggestions</h3>
+    <table class="table table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Started
+                </th>
+                <th>
+                    Ended
+                </th>
+                <th>
+                    Networks
+                </th>
+                <th>
+                    Categories
+                </th>
+                <th>
+                    Thumbnail
+                </th>
+                <th>
+                    User
+                </th>
+                <th>
+                    Modified
+                </th>
+                <th>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for change in new_suggestions %}
+                <tr {% if change.accepted == False%} style='background-color: #F57A76'>{% else %} style='background-color: #87ED96'>{% endif %}
+                    <td>
+                        {{ change.name }}
+                    </td>
+                    <td>
+                        {{ change.started }}
+                    </td>
+                    <td>
+                        {{ change.ended }}
+                    </td>
+                    <td>
+                        {% for network in change.networks.all %}
+                            {{ network }}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for category in change.categories.all %}
+                            {{ category }}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {{ change.thumbnail}}
+                    </td>
+                    <td>
+                        {{ change.user.username}}
+                    </td>
+                    <td>
+                        {{ change.modified }}
+                    </td>
+                    <td>
+                        {% if change.accepted == False%}
+                            <a href="/accept_change/{{ change.id }}">
+                                <i class="icon- icon-ok-sign"></i>
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

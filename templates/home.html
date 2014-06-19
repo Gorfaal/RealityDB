@@ -1,0 +1,166 @@
+{% extends 'base.html'  %}
+{% block body %}
+
+<script type="text/javascript">
+    function filterShows(){
+        var name = $('#showTitle').val();
+        var startDate = $('#startDateVal').val();
+        var endDate = $('#endDateVal').val();
+        var networks = $('#networks').val();
+        var categories = $('#categories').val();
+
+        $.ajax({
+            type: 'POST',
+            url: '/filter_shows/',
+            data:{
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                name: name,
+                startDate: startDate,
+                endDate: endDate,
+                networks: networks,
+                categories: categories
+            },
+            success: function(shows_result){
+                var showContainer = $('#showContainer');
+                showContainer.empty();
+                var ul = $('<ul style=\'list-style:none;\'>');
+                for(var i = 0; i < shows_result.length; i++){
+                    var a = $("<a>");
+                    a.attr('href', '/suggest_change/' + shows_result[i].id);
+                    a.append(shows_result[i].name);
+                    var li = $("<li>");
+                    li.append(a);
+                    ul.append(li)
+                }
+                showContainer.append(ul);
+            },
+            error: function(e){
+                alert('Sorry, we messed up. Please try again.')
+            }
+        });
+
+    }
+
+    function clearStartDate(){
+        $('#startDateVal').val('');
+    }
+
+    function clearEndDate(){
+        $('#endDateVal').val('');
+    }
+</script>
+<div class="container">
+    <div class="row-fluid" style="margin-top: 70px;">
+        <div class="span6">
+            <h2>Filter Parameters</h2>
+            <form>
+                <fieldset>
+                    <label>
+                        Show Title
+                    </label>
+                    <input width="50%" id="showTitle" type="text" placeholder="Filter by show title">
+                    <label>
+                        Start Date
+                    </label>
+                    <div class="input-append date" id="startDate" data-date="" data-date-format="mm/dd/yyyy">
+                        <input size="16" type="text" readonly="" id="startDateVal">
+                        <span class="add-on"><i class="icon-calendar"></i></span>
+                    </div>
+                    <a href="javascript:clearStartDate()">Clear</a>
+                    <label>
+                        End Date
+                    </label>
+                    <div class="input-append date" id="endDate" data-date="" data-date-format="mm/dd/yyyy">
+                        <input size="16" type="text" readonly="" id="endDateVal">
+                        <span class="add-on"><i class="icon-calendar"></i></span>
+                    </div>
+                    <a href="javascript:clearEndDate()">Clear</a>
+                </fieldset>
+            </form>
+        </div>
+
+        <div class="span3" >
+            <h2>Networks</h2>
+                <select multiple style="height: 200px" id="networks">
+                    {% for network in networks %}
+                        <option value={{ network.id }}>{{ network.name }}</option>
+                    {% endfor %}
+                </select>
+
+        </div>
+
+        <div class="span3">
+            <h2>Categories</h2>
+                <select multiple style="height: 200px" id="categories">
+                    {% for category in categories %}
+                        <option value={{ category.id }}>{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+        </div>
+    </div>
+
+    <div class="row-fluid" style="text-align: left">
+        <div class="span12">
+            <a class="btn btn-inverse" href="javascript:filterShows()">Filter »</a>
+            <a class="btn btn-inverse" href="/">Clear All</a>
+        </div>
+    </div>
+</div>
+
+<h1 style="text-align: center">Results</h1>
+<div class="hero-unit" style="margin-top: 10px; max-height: 350px;">
+    <div style="max-height: 300px; overflow-y: scroll" id="showContainer">
+        Please enter your filter criteria and click 'Filter'
+    </div>
+</div>
+
+
+<div class="modal hide" id="myModal">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>Add entry</h3>
+    </div>
+    <div class="modal-body">
+        <form action="/show/create/" method="post" style="" enctype="multipart/form-data">{% csrf_token %}
+            <fieldset>
+                <ul style="list-style-type: none;">
+                    <li>
+                        <label>Name</label>
+                        {{ form.name }}
+                    </li>
+                    <li>
+                        <label>Started</label>
+                        <div class="input-append date" id="addShowStart" data-date="" data-date-format="mm/dd/yyyy">
+                            {{ form.started }}
+                            <span class="add-on"><i class="icon-calendar"></i></span>
+                        </div>
+                    </li>
+                    <li>
+                        <label>Ended</label>
+                        <div class="input-append date" id="addShowEnd" data-date="" data-date-format="mm/dd/yyyy">
+                            {{ form.ended }}
+                            <span class="add-on"><i class="icon-calendar"></i></span>
+                        </div>
+                    </li>
+                    <li>
+                        <label>Networks</label>
+                        {{ form.networks }}
+                    </li>
+                    <li>
+                        <label>Categories</label>
+                        {{ form.categories }}
+                    </li>
+                    <li>
+                        <label>Thumbnail</label>
+                         {{ form.thumbnail }}
+                    </li>
+                </ul>
+            </fieldset>
+            <div class="modal-footer">
+                <a href="#" class="btn" data-dismiss="modal">Close</a>
+                <input class="btn btn=primary" type="submit" value="Submit" />
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

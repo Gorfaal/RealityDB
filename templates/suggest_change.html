@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block body %}
+<div style="margin-top: 70px;">
+    <form action="/suggest_change/{{ show.id }}" method="post" style="">{% csrf_token %}
+            <fieldset>
+                <ul style="list-style-type: none;">
+                    <li>
+                        <label>Name</label>
+                        {{ form.name }}
+                    </li>
+                    <li>
+                        <label>Started</label>
+                        <div class="input-append date" id="addShowStart" data-date="" data-date-format="mm/dd/yyyy">
+                            {{ form.started }}
+                            <span class="add-on"><i class="icon-calendar"></i></span>
+                        </div>
+                    </li>
+                    <li>
+                        <label>Ended</label>
+                        <div class="input-append date" id="addShowEnd" data-date="" data-date-format="mm/dd/yyyy">
+                            {{ form.ended }}
+                            <span class="add-on"><i class="icon-calendar"></i></span>
+                        </div>
+                    </li>
+                    <li>
+                        <label>Networks</label>
+                        {{ form.networks }}
+                    </li>
+                    <li>
+                        <label>Categories</label>
+                        {{ form.categories }}
+                    </li>
+                    <li>
+                        <label>Thumbnail</label>
+                         {{ form.thumbnail }}
+                    </li>
+                </ul>
+            </fieldset>
+            <input class="btn btn=primary" type="submit" value="Submit" />
+    </form>
+</div>
+
+
+<div class="modal hide" id="myModal">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>Add entry</h3>
+    </div>
+    <div class="modal-body">
+        <form action="/show/create/" method="post" style="" enctype="multipart/form-data">{% csrf_token %}
+            <fieldset>
+                <ul style="list-style-type: none;">
+                    <li>
+                        <label>Name</label>
+                        {{ form.name }}
+                    </li>
+                    <li>
+                        <label>Started</label>
+                        <div class="input-append date" id="addShowStart" data-date="" data-date-format="dd-mm-yyyy">
+                            {{ form.started }}
+                            <span class="add-on"><i class="icon-calendar"></i></span>
+                        </div>
+                    </li>
+                    <li>
+                        <label>Ended</label>
+                        <div class="input-append date" id="addShowEnd" data-date="" data-date-format="dd-mm-yyyy">
+                            {{ form.ended }}
+                            <span class="add-on"><i class="icon-calendar"></i></span>
+                        </div>
+                    </li>
+                    <li>
+                        <label>Networks</label>
+                        {{ form.networks }}
+                    </li>
+                    <li>
+                        <label>Categories</label>
+                        {{ form.categories }}
+                    </li>
+                    <li>
+                        <label>Thumbnail</label>
+                         {{ form.thumbnail }}
+                    </li>
+                </ul>
+            </fieldset>
+            <div class="modal-footer">
+                <a href="#" class="btn" data-dismiss="modal">Close</a>
+                <input class="btn btn=primary" type="submit" value="Submit" />
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
